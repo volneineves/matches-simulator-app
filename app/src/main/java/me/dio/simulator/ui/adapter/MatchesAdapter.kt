@@ -1,11 +1,13 @@
 package me.dio.simulator.ui.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import me.dio.simulator.databinding.MatchItemBinding
 import me.dio.simulator.domain.Match
+import me.dio.simulator.ui.DetailActivity
 
 class MatchesAdapter(
     val matches: List<Match>
@@ -30,6 +32,12 @@ class MatchesAdapter(
         Glide.with(context).load(match.awayTeam.image).circleCrop().into(holder.binding.ivAwayTeam)
         holder.binding.tvAwayTeamName.text = match.awayTeam.name
         holder.binding.tvAwayTeamScore.text = match.awayTeam.score.toString()
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.Extras.MATCH, match)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount() = matches.size
