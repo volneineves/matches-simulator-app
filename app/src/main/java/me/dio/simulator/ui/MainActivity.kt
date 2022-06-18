@@ -6,18 +6,24 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import me.dio.simulator.data.MatchesApi
 import me.dio.simulator.databinding.ActivityMainBinding
 import me.dio.simulator.domain.Match
 import me.dio.simulator.ui.adapter.MatchesAdapter
-import retrofit2.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var matchesApi: MatchesApi
+    private var matchesAdapter = MatchesAdapter(Collections.emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupMatchesList() {
         binding.rvMatches.setHasFixedSize(true)
         binding.rvMatches.layoutManager = LinearLayoutManager(this)
+        binding.rvMatches.adapter = matchesAdapter;
         findMatchesFromApi()
     }
 
@@ -56,28 +63,42 @@ class MainActivity : AppCompatActivity() {
             view.animate().rotationBy(360F).setDuration(500)
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator?) {
+                        for (i in 0 until matchesAdapter.itemCount) {
+                            val match = matchesAdapter.matches[i]
+                            match.homeTeam.score = Random().nextInt(match.homeTeam.stars + 1)
+                            match.awayTeam.score = Random().nextInt(match.awayTeam.stars + 1)
+                            matchesAdapter.notifyItemChanged(i)
+                        }
                     }
                 })
         }
     }
+
 
     private fun findMatchesFromApi() {
         binding.srlMatches.isRefreshing = true
         matchesApi.getMatches().enqueue(object : Callback<List<Match>> {
             override fun onResponse(call: Call<List<Match>>, response: Response<List<Match>>) {
                 if (response.isSuccessful) {
-                    val matches: List<Match>? = response.body();
-                    val matchesAdapter = matches?.let { MatchesAdapter(it) }
+                    val matches: List<Match>? = response.body()
+                    matchesAdapter = matches?.let { MatchesAdapter(it) } ?: MatchesAdapter(Collections.emptyList())
                     binding.rvMatches.adapter = matchesAdapter
-                    //                    Log.i("SIMULATOR", "Deu tudo certo! Partidas: " + matches?.size)
-                } else Log.i("SIMULATOR", "Deu tudo errado: ${response.message()}")
+                } else showErrorMessage()
                 binding.srlMatches.isRefreshing = false
             }
 
             override fun onFailure(call: Call<List<Match>>, t: Throwable) {
+                showErrorMessage()
                 binding.srlMatches.isRefreshing = false
-                Log.i("SIMULATOR", "Deu tudo errado: ${t.message}")
             }
         })
+    }
+
+    private fun showErrorMessage() {
+        Snackbar.make(
+            binding.fabSimulate,
+            getString(me.dio.simulator.R.string.erro_api),
+            Snackbar.LENGTH_LONG
+        ).show()
     }
 }

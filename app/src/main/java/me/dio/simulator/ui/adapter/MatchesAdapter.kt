@@ -8,7 +8,7 @@ import me.dio.simulator.databinding.MatchItemBinding
 import me.dio.simulator.domain.Match
 
 class MatchesAdapter(
-    private val matches: List<Match>
+    val matches: List<Match>
 ) : RecyclerView.Adapter<MatchesAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: MatchItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -26,8 +26,10 @@ class MatchesAdapter(
         // Adapta os dados da partida (recuperada da API) para o nosso layout.
         Glide.with(context).load(match.homeTeam.image).circleCrop().into(holder.binding.ivHomeTeam)
         holder.binding.tvHomeTeamName.text = match.homeTeam.name
+        holder.binding.tvHomeTeamScore.text = match.homeTeam.score.toString()
         Glide.with(context).load(match.awayTeam.image).circleCrop().into(holder.binding.ivAwayTeam)
         holder.binding.tvAwayTeamName.text = match.awayTeam.name
+        holder.binding.tvAwayTeamScore.text = match.awayTeam.score.toString()
     }
 
     override fun getItemCount() = matches.size
