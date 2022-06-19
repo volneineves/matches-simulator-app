@@ -13,15 +13,23 @@ App Android Nativo de Simulação de Partidas. Este repositório foi organizado 
 1. Java e Kotlin Juntos!? Construindo Apps Android
    - [release/java-e-kotlin-juntos-construindo-apps-android](https://github.com/digitalinnovationone/matches-simulator-app/tree/release/java-e-kotlin-juntos-construindo-apps-android)
 1. Explorando o Firebase Para Apps Android Resilientes
-   - [release/explorando-o-firebase-para-apps-android-resilientes](https://github.com/digitalinnovationone/matches-simulator-app/tree/release/explorando-o-firebase-para-apps-android-resilientes) </b>
+   - [release/explorando-o-firebase-para-apps-android-resilientes](https://github.com/digitalinnovationone/matches-simulator-app/tree/release/explorando-o-firebase-para-apps-android-resilientes)
+1. Documentação da DIO 
+   - [docs.google.com/presentation](https://docs.google.com/presentation/d/12fe7wVtOs-vXnzzX-_ywEpq4p-BYkPS1/edit#slide=id.p2) </b>
 
 
 ### :keyboard: Instalação e Execução do Projeto
 
-- Respositório do projeto
+- APP: Repositório do projeto 
 
 ```
 > git clone https://github.com/volneineves/matches-simulator-app
+```
+
+- API: Repositório do projeto 
+
+```
+> git clone https://github.com/volneineves/matches-simulator-api
 ```
 
 - Navegue até o diretório principal do projeto
